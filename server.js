@@ -28,6 +28,14 @@ app.use(errorHandler);
 
 // start
 const PORT = process.env.PORT || 5000;
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-});
+
+// Connect to database and start server
+connectDB()
+  .then(() => {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((error) => {
+    console.error('Failed to connect to database:', error.message);
+    console.error('Server will not start without database connection');
+    process.exit(1);
+  });
