@@ -56,22 +56,27 @@ The server will start on `http://localhost:5000`
 
 1. In MongoDB Atlas, go to "Network Access" in the left sidebar
 2. Click "Add IP Address"
-3. Select "Allow access from anywhere" (0.0.0.0/0) for development
-4. Click "Confirm"
+3. For development, select "Allow access from anywhere" (0.0.0.0/0)
+4. For production, you can add Render's IP ranges:
+   - 104.155.141.0/24
+   - 104.197.148.0/24
+   - 104.198.142.0/24
+   - 104.198.159.0/24
+   - 104.198.198.0/24
+   - 104.198.204.0/24
+   - 35.188.108.0/24
+   - 35.192.147.0/24
+   - 35.193.160.0/24
+   - 35.202.130.0/24
+   - 35.224.176.0/24
+   - 35.226.124.0/24
+   - 35.227.134.0/24
+   - 35.232.220.0/24
+   - 35.238.160.0/24
+   - 35.242.71.0/24
+5. Click "Confirm"
 
-### Step 4: Update your `.env` file
-
-For local development:
-```
-MONGO_URI=mongodb://localhost:27017/todoapp
-```
-
-For production deployment:
-```
-MONGO_URI=mongodb+srv://yourUsername:yourPassword@yourCluster.yourID.mongodb.net/todoapp?retryWrites=true&w=majority
-```
-
-### Step 5: Deploy to Render
+### Step 4: Deploy to Render
 
 1. Push your code to GitHub
 2. Go to [Render](https://render.com) and create an account
@@ -81,10 +86,11 @@ MONGO_URI=mongodb+srv://yourUsername:yourPassword@yourCluster.yourID.mongodb.net
    - Name: Your service name
    - Environment: Node
    - Build command: `npm install`
-   - Start command: `node server.js`
+   - Start command: `npm start`
    - Environment variables:
      - Add your `MONGO_URI` with your MongoDB Atlas connection string
      - Add your `JWT_SECRET` with a secure secret key
+     - PORT will be automatically set by Render
 
 6. After deployment, Render will provide a URL for your API (e.g., `https://your-app-name.onrender.com`)
 
@@ -96,11 +102,13 @@ MONGO_URI=mongodb+srv://yourUsername:yourPassword@yourCluster.yourID.mongodb.net
 - PUT `/api/tasks/:id` - Update a task
 - PATCH `/api/tasks/:id` - Partially update a task
 - DELETE `/api/tasks/:id` - Delete a task
+- GET `/api/health` - Health check endpoint
 
 ## CORS Configuration
 
 The API is configured to accept requests from:
 - http://localhost:5173 (local development)
+- http://localhost:5000 (local development)
 - https://task8mern.netlify.app (production)
 
 If you're using a different frontend URL, update the CORS configuration in `server.js`.
@@ -118,6 +126,20 @@ This means your `MONGO_URI` is not properly formatted. Make sure you're using th
 ```
 mongodb+srv://username:password@cluster.yourID.mongodb.net/databaseName?retryWrites=true&w=majority
 ```
+
+### Authentication Issues
+
+If you see errors like:
+```
+bad auth : authentication failed
+```
+
+Check:
+1. Username in connection string is correct
+2. Password in connection string is correct
+3. User exists in MongoDB Atlas Database Access
+4. Password contains special characters that need URL encoding
+5. User has proper permissions (Read and write to any database)
 
 ### CORS Issues
 
