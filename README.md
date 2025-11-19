@@ -27,7 +27,7 @@ The server will start on `http://localhost:5000`
 The API is configured to accept requests from:
 - http://localhost:5173 (local development)
 - http://localhost:5000 (local development)
-- https://task8mern.netlify.app (production)
+- https://task9mern.netlify.app (production)
 
 If you're using a different frontend URL, update the CORS configuration in server.js.
 
